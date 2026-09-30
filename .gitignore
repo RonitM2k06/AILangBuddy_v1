@@ -1,0 +1,7 @@
+.env
+.venv/
+buddy.db
+__pycache__/
+*.pyc
+.DS_Store
+
