@@ -1,0 +1,436 @@
+"""The Bengali curriculum (A1): data only (tools/gen_bengali_curriculum.py turns it into migration SQL).
+
+The 7 First Week lessons take their phrases from the Kolkata pack (frontend/content.js PACKS.kolkata); this file adds what the pack does not
+have: their words, exercises and grammar notes, two more A1 lessons, the situations (server roleplays) and their steps. Every phrase is
+(Bengali script, romanised, literal English, natural English). Bengali verbs do not change for the speaker's gender, so no phrase has a
+feminine form. The romanisation follows the pack: spoken Kolkata Bengali, no diacritics, "sh" for শ/ষ/স as Kolkata speakers say them, English
+loanwords joined to Bengali endings with a hyphen ("Meter-e", "Class-ta").
+Written by the LingoBuddy team with an AI-assisted editorial pass; NOT reviewed by a native speaker (docs/CONTENT_REVIEW.md)."""
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+# What the First Week lessons add to the pack's phrases: words (each with an example phrase of the lesson) and exercises
+# (what a phrase means, translate a phrase, fill in a word).
+# ------------------------------------------------------------------------------------------------------------------------------------
+FIRST_WEEK = {
+    "greetings": {"description": "Greet people politely and introduce yourself in Bengali.",
+                  "words": [("নাম", "Naam", "Name", "আমার নাম অ্যালেক্স।"), ("নতুন", "Notun", "New", "আমি এখানে নতুন।")],
+                  "exercises": ("Nomoshkar! Kemon achhen?", "Onek dhonnobad!", ("Amar naam Alex.", "naam"))},
+    "transport": {"description": "Take a yellow taxi by the meter, and the metro.",
+                  "words": [("মিটার", "Meter", "Meter (in a taxi)", "মিটারে যাবেন তো?"), ("কোথায়", "Kothay", "Where", "মেট্রো স্টেশন কোথায়?")],
+                  "exercises": ("Meter-e jaben to?", "Ekhane thamun.", ("Koto lagbe?", "koto"))},
+    "food": {"description": "Order a kathi roll, tea in a clay cup and the famous sweets.",
+             "words": [("ঝাল", "Jhal", "Spicy, chilli-hot", "ঝাল কম দেবেন।"), ("চা", "Cha", "Tea", "এক ভাঁড় চা।")],
+             "exercises": ("Jhal kom deben.", "Ekta egg roll din.", ("Ek bhaar cha.", "bhaar"))},
+    "shopping": {"description": "Ask prices and colours, and bargain where it's normal.",
+                 "words": [("দাম", "Daam", "Price", "এটার দাম কত?"), ("রং", "Rong", "Colour", "অন্য রং আছে?")],
+                 "exercises": ("Onno rong achhe?", "Etar daam koto?", ("Ektu kom korun.", "kom"))},
+    "directions": {"description": "Find your way, a pharmacy and the metro, and ask people to slow down.",
+                   "words": [("ডান", "Daan", "Right (direction)", "সোজা যান, তারপর ডান দিকে।"), ("দোকান", "Dokan", "Shop", "কাছে কোনো ওষুধের দোকান আছে?")],
+                   "exercises": ("Hete kotokkhon lagbe?", "Victoria Memorial kon dike?", ("Shoja jan, tarpor daan dike.", "daan"))},
+    "college": {"description": "Settle in with classmates and colleagues.", "ages": ("teen", "adult"),
+                "words": [("দিন", "Din", "Day", "আজ আমার প্রথম দিন।"), ("সাহায্য", "Shahajjo", "Help", "একটু সাহায্য করবেন?")],
+                "exercises": ("Ektu shahajjo korben?", "Class-ta kothay?", ("Pore dekha hobe!", "dekha"))},
+    "smalltalk": {"description": "Put everything together in a proper Kolkata adda.",
+                  "words": [("গরম", "Gorom", "Hot (weather)", "কলকাতায় খুব গরম, না?"), ("রবিবার", "Robibar", "Sunday", "রবিবার কলেজ স্ট্রিট যাবে?")],
+                  "exercises": ("Adda dite khub bhalo lage!", "Tumi ki Kolkatar-i?", ("Kolkatay khub gorom, na?", "gorom"))},
+}
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+# A1, after the 7 First Week lessons (sort_order 8-9)
+# ------------------------------------------------------------------------------------------------------------------------------------
+A1_LESSONS = [
+    {"slug": "numbers-money", "topic": "shopping", "title": "Numbers and Money", "description": "Count, pay and understand prices.",
+     "situation": "Paying at a grocery shop in Gariahat.",
+     "tip": "Bengali numbers: ek, dui, tin, char, panch, chhoy, saat, aat, noy, dosh; eksho = 100, hajar = 1000. Prices are often said in English too, so listen for both.",
+     "phrases": [
+         ("সব মিলিয়ে কত হল?", "Sob miliye koto holo?", "All together how much did it become?", "How much is it altogether?"),
+         ("একশো টাকা।", "Eksho taka.", "Hundred rupees.", "A hundred rupees."),
+         ("খুচরো আছে?", "Khuchro achhe?", "Is there change?", "Do you have change?"),
+         ("পঞ্চাশ টাকার নোট চলবে?", "Ponchash takar note cholbe?", "Will a note of fifty rupees work?", "Is a fifty-rupee note okay?"),
+         ("বিলটা দিন।", "Bill-ta din.", "The bill please give.", "Can I have the bill, please?"),
+     ],
+     "words": [("টাকা", "Taka", "Rupees, money", "একশো টাকা।"), ("খুচরো", "Khuchro", "Change (coins and small notes)", "খুচরো আছে?")],
+     "exercises": ("Khuchro achhe?", "Eksho taka.", ("Sob miliye koto holo?", "miliye"))},
+    {"slug": "help-health", "topic": "emergency", "title": "Help and Health", "description": "Ask for help, a doctor or a pharmacy.",
+     "situation": "You feel unwell late at night in Salt Lake.",
+     "tip": "India's emergency number is 112 (police, fire and ambulance). A pharmacy is an “oshudher dokan” or simply a “medical shop”, and many stay open late.",
+     "phrases": [
+         ("আমার সাহায্য লাগবে!", "Amar shahajjo lagbe!", "To me help will be needed!", "I need help!"),
+         ("কাছে হাসপাতাল কোথায়?", "Kachhe haspatal kothay?", "Nearby hospital where?", "Where's the nearest hospital?"),
+         ("আমার শরীর ভালো নেই।", "Amar shorir bhalo nei.", "My body is not well.", "I don't feel well."),
+         ("আমার জ্বর হয়েছে।", "Amar jor hoyechhe.", "To me fever has happened.", "I have a fever."),
+         ("ওষুধের দোকান খোলা আছে?", "Oshudher dokan khola achhe?", "Is the medicine shop open?", "Is the pharmacy open?"),
+         ("পুলিশ ডাকুন!", "Police dakun!", "Police please call!", "Please call the police!"),
+     ],
+     "words": [("হাসপাতাল", "Haspatal", "Hospital", "কাছে হাসপাতাল কোথায়?"), ("জ্বর", "Jor", "Fever", "আমার জ্বর হয়েছে।")],
+     "exercises": ("Amar shorir bhalo nei.", "Police dakun!", ("Kachhe haspatal kothay?", "haspatal"))},
+]
+
+GRAMMAR = [
+    # (slug, level, title, explanation, example phrases, lesson slugs)
+    ("polite-requests", "A1", "Polite requests: “din”, “korun”, “bolun”",
+     "Bengali asks politely with the “apni” (you, polite) form of the verb, which ends in -un or -en: “din” (please give), “korun” (please do), "
+     "“bolun” (please say), “thamun” (please stop). With friends the “tumi” form is used: “dao”, “koro”, “bolo”.",
+     ["একটা এগ রোল দিন।", "একটু কম করুন।", "এখানে থামুন।"], ["food", "shopping", "transport"]),
+    ("questions", "A1", "Questions: “ki”, “koto”, “kothay”",
+     "A yes-no question is a statement said with a rising voice, often with “ki” after the subject: “Tumi ki Kolkatar-i?” (are you from "
+     "Kolkata?). A question word stays where the answer would go: “Etar daam koto?” (this one's price, how much?), “Metro station kothay?”.",
+     ["তুমি কি কলকাতারই?", "এটার দাম কত?", "মেট্রো স্টেশন কোথায়?"], ["smalltalk", "shopping", "transport"]),
+    ("in-at-a-place", "A1", "In, at and by: “-e”, “-y” and “-te”",
+     "Bengali puts “in / at / by” at the end of the word: “-e” after a consonant (canteen-e, meter-e), “-y” or “-te” after a vowel "
+     "(Kolkatay, metro-te). “Kolkatay khub gorom” = it's very hot in Kolkata.",
+     ["কলকাতায় খুব গরম, না?", "ক্যান্টিনে চা খাবে?", "মিটারে যাবেন তো?"], ["smalltalk", "college", "transport"]),
+]
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+# Situations (server roleplays): the 7 First Week roleplays and Help and Health. learn: lesson phrases (romanised); choose: the partner's
+# opening line with options (the first is right); reply: the partner's answer with accepted replies; translate: optional.
+# ------------------------------------------------------------------------------------------------------------------------------------
+SITUATIONS = [
+    {"slug": "greetings", "level": "A1", "topic": "greetings", "difficulty": 1, "title": "Meet your landlady",
+     "description": "You've just rented a flat in Salt Lake. Mitra mashima, your landlady, comes to say hello.",
+     "goal": "Greet politely, introduce yourself and say you're new.", "setting": "Your rented flat in Salt Lake",
+     "partner": ("Mitra mashima", "Landlady"),
+     "learn": ["Nomoshkar! Kemon achhen?", "Amar naam Alex.", "Onek dhonnobad!"],
+     "choose": ("Nomoshkar! Tumi-i Alex? Ami Mitra mashima.", "Hello! Are you Alex? I'm Mrs Mitra.",
+                ["Hyan, ami ekhane notun.", "Ekta egg roll din.", "Metro station kothay?"]),
+     "reply": ("Shagotom! Kichhu dorkar hole bolbe.", "Welcome! Tell me if you need anything.", ["Onek dhonnobad!", "Dhonnobad!", "Thik achhe, dhonnobad."]),
+     "translate": ("How would you say “Lovely to meet you” in Bengali?", "Apnar shonge alap kore bhalo laglo.")},
+    {"slug": "transport", "level": "A1", "topic": "transport", "difficulty": 1, "title": "Yellow taxi to Park Street",
+     "description": "You need to get from Howrah Station to Park Street by taxi.", "goal": "Get to Park Street by the meter.",
+     "setting": "The taxi stand outside Howrah Station", "partner": ("Bapi da", "Taxi driver"),
+     "learn": ["Park Street jaben?", "Meter-e jaben to?", "Ekhane thamun."],
+     "choose": ("Kothay jaben?", "Where to?", ["Park Street jaben?", "Ek bhaar cha.", "Amar naam Alex."]),
+     "reply": ("Meter-e jabo, kintu kuri taka beshi lagbe.", "I'll go by the meter, but it's twenty extra.",
+               ["Na, meter-er beshi debo na.", "Thik achhe, kuri taka beshi.", "Meter-e cholun."])},
+    {"slug": "food", "level": "A1", "topic": "food", "difficulty": 1, "title": "Rolls near Park Street", "description": "An evening snack at a kathi roll stall near Park Street.",
+     "goal": "Order a roll and a cup of tea, ask for less chilli and pay.", "setting": "A kathi roll stall near Park Street", "partner": ("Shibu da", "Roll stall owner"),
+     "learn": ["Ekta egg roll din.", "Jhal kom deben.", "Koto holo?"],
+     "choose": ("Bolun, ki debo?", "Tell me, what can I get you?", ["Ekta egg roll din.", "Ekhane thamun.", "Onno rong achhe?"]),
+     "reply": ("Egg roll! Lonka debo?", "An egg roll! Shall I put chilli in?", ["Jhal kom deben.", "Na, lonka kom.", "Ektu jhal din."]),
+     "translate": ("How would you say “A cup of tea, please” in Bengali?", "Ek bhaar cha.")},
+    {"slug": "shopping", "level": "A1", "topic": "shopping", "difficulty": 2, "title": "A saree in Gariahat", "description": "You're at a saree stall in Gariahat Market.",
+     "goal": "Buy a handloom saree at a fair price.", "setting": "Gariahat Market", "partner": ("Rina di", "Shopkeeper"),
+     "learn": ["Etar daam koto?", "Khub beshi daam.", "Ektu kom korun."],
+     "choose": ("Ashun, dekhun! Taant, tussar, sob achhe.", "Come in, take a look! Taant, tussar, we have it all.", ["Etar daam koto?", "Meter-e jaben to?", "Class-ta kothay?"]),
+     "reply": ("Ei taant? Hajar taka.", "This taant saree? A thousand rupees.", ["Khub beshi daam.", "Ektu kom korun.", "Shesh daam koto?"])},
+    {"slug": "directions", "level": "A1", "topic": "directions", "difficulty": 2, "title": "Find the Victoria Memorial",
+     "description": "You've come out of Esplanade metro and want the Victoria Memorial.",
+     "goal": "Find the way to the Victoria Memorial, and a pharmacy.", "setting": "Outside Esplanade metro station", "partner": ("Ghosh babu", "Passerby"),
+     "learn": ["Victoria Memorial kon dike?", "Shoja jan, tarpor daan dike.", "Ektu aste bolun."],
+     "choose": ("Kichhu khunjchhen?", "Looking for something?", ["Victoria Memorial kon dike?", "Ekta egg roll din.", "Etar daam koto?"]),
+     "reply": ("Shoja jan, tarpor daan dike. Maidan perolei Victoria.", "Go straight, then turn right. Past the Maidan is the Victoria Memorial.",
+               ["Hete kotokkhon lagbe?", "Ektu aste bolun.", "Onek dhonnobad!"])},
+    {"slug": "college", "level": "A1", "topic": "college", "difficulty": 2, "title": "First day at Jadavpur University", "description": "Your first day at Jadavpur University.",
+     "goal": "Introduce yourself and find the class and the canteen.", "setting": "Jadavpur University campus", "partner": ("Priya", "Classmate"),
+     "ages": ("teen", "adult"),
+     "learn": ["Aaj amar prothom din.", "Class-ta kothay?", "Canteen-e cha khabe?"],
+     "choose": ("Hi! Tumi notun? Ami Priya.", "Hi! Are you new? I'm Priya.", ["Hyan, aaj amar prothom din.", "Meter-e jaben to?", "Koto holo?"]),
+     "reply": ("Welcome! Class dotolay, ghor dusho char.", "Welcome! The class is on the first floor, room 204.", ["Ektu shahajjo korben?", "Canteen-e cha khabe?", "Thik achhe, dhonnobad."])},
+    {"slug": "smalltalk", "level": "A1", "topic": "smalltalk", "difficulty": 2, "title": "Adda at Prinsep Ghat", "description": "Sunset at Prinsep Ghat with Arko, a friend from college.",
+     "goal": "Chat about Kolkata and make Sunday plans.", "setting": "Prinsep Ghat at sunset", "partner": ("Arko", "Friend"),
+     "learn": ["Adda dite khub bhalo lage!", "Kolkatay khub gorom, na?", "Robibar College Street jabe?"],
+     "choose": ("Ki re, Kolkata kemon lagchhe?", "Hey, how are you liking Kolkata?", ["Adda dite khub bhalo lage!", "Meter-e jaben to?", "Bill-ta din."]),
+     "reply": ("Hyan! Kintu borshay brishti-o khub.", "Yes! But in the monsoon it rains a lot too.", ["Kolkatay khub gorom, na?", "Robibar College Street jabe?", "Darun, paka!"]),
+     "translate": ("How would you say “Are you from Kolkata?” in Bengali?", "Tumi ki Kolkatar-i?")},
+    {"slug": "help-health", "level": "A1", "topic": "emergency", "difficulty": 2, "title": "At the pharmacy late at night", "description": "You feel unwell late at night in Salt Lake.",
+     "goal": "Say what is wrong and find out where the hospital is.", "setting": "A pharmacy in Salt Lake", "partner": ("Sumon", "Pharmacist"),
+     "learn": ["Amar shorir bhalo nei.", "Amar jor hoyechhe.", "Kachhe haspatal kothay?"],
+     "choose": ("Ashun, ki hoyechhe?", "Come in, what happened?", ["Amar shorir bhalo nei.", "Etar daam koto?", "Robibar College Street jabe?"]),
+     "reply": ("Jor? Ei oshudh-ta khan. Beshi hole haspatal-e jaben.", "A fever? Take this medicine. If it gets worse, go to the hospital.",
+               ["Kachhe haspatal kothay?", "Amar jor hoyechhe.", "Onek dhonnobad!"])},
+]
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+# A2: the topics of Kannada's and Tamil's A2, set in and around Kolkata (migration 0049)
+# ------------------------------------------------------------------------------------------------------------------------------------
+A2_LESSONS = [
+    {"slug": "yesterday", "topic": "smalltalk", "title": "What I Did Yesterday", "description": "Talk about the past: where you went and what you did.",
+     "situation": "Monday morning: a colleague asks about your weekend.",
+     "tip": "Kolkata Bengali uses “kal” for both yesterday and tomorrow: the verb tells you which. The past ends in -lam for “I”: “gelam” (I went), “khelam” (I ate), “korlam” (I did), and in -len for the polite “you”: “korlen?” (did you do?).",
+     "phrases": [
+         ("কাল আমি ভিক্টোরিয়া মেমোরিয়ালে গেলাম।", "Kal ami Victoria Memorial-e gelam.", "Yesterday I went to the Victoria Memorial.", "Yesterday I went to the Victoria Memorial."),
+         ("বন্ধুদের সঙ্গে ফুচকা খেলাম।", "Bondhuder shonge phuchka khelam.", "With friends I ate phuchka.", "I had phuchka with friends."),
+         ("আমি বাড়িতেই বিশ্রাম নিলাম।", "Ami barite-i bishram nilam.", "I took rest at home itself.", "I just rested at home."),
+         ("কাল আপনি কী করলেন?", "Kal apni ki korlen?", "Yesterday what did you do?", "What did you do yesterday?"),
+         ("খুব ভালো লাগল।", "Khub bhalo laglo.", "It felt very good.", "It was really nice."),
+     ],
+     "words": [("কাল", "Kal", "Yesterday; tomorrow", "কাল আমি ভিক্টোরিয়া মেমোরিয়ালে গেলাম।"), ("সঙ্গে", "Shonge", "With", "বন্ধুদের সঙ্গে ফুচকা খেলাম।")],
+     "exercises": ("Kal apni ki korlen?", "Khub bhalo laglo.", ("Bondhuder shonge phuchka khelam.", "khelam"))},
+    {"slug": "plans", "topic": "smalltalk", "title": "Plans for the Weekend", "description": "Make plans and talk about the future.",
+     "situation": "Friday evening: making weekend plans with a flatmate.",
+     "tip": "The future ends in -bo for “I”: “jabo” (I'll go), “uthbo” (I'll get up), “pathabo” (I'll send). “Let's” is “cholo, … -i”: “cholo, metro-te jai” (let's go by metro).",
+     "phrases": [
+         ("রবিবার কী প্ল্যান?", "Robibar ki plan?", "Sunday what plan?", "What's the plan for Sunday?"),
+         ("কাল সকালে তাড়াতাড়ি উঠব।", "Kal shokale taratari uthbo.", "Tomorrow morning early I'll get up.", "I'll get up early tomorrow morning."),
+         ("চলো, মেট্রোতে যাই।", "Cholo, metro-te jai.", "Come, by metro let's go.", "Let's go by metro."),
+         ("আমরা দক্ষিণেশ্বর যাব।", "Amra Dakshineswar jabo.", "We will go to Dakshineswar.", "We'll go to Dakshineswar."),
+         ("কাল কথা হবে।", "Kal kotha hobe.", "Tomorrow talk will happen.", "Let's talk tomorrow."),
+     ],
+     "words": [("সকাল", "Shokal", "Morning", "কাল সকালে তাড়াতাড়ি উঠব।"), ("তাড়াতাড়ি", "Taratari", "Early, quickly", "কাল সকালে তাড়াতাড়ি উঠব।")],
+     "exercises": ("Robibar ki plan?", "Kal kotha hobe.", ("Kal shokale taratari uthbo.", "uthbo"))},
+    {"slug": "favours", "topic": "greetings", "title": "Asking for Favours", "description": "Ask politely for help and favours.",
+     "situation": "Asking a neighbour in your building for help.",
+     "tip": "To ask kindly, ask whether the person could do it: “korte parben?” (could you do?), “bolte parben?” (could you say?). “Ektu” (a little) softens anything.",
+     "phrases": [
+         ("আমাকে একটু সাহায্য করতে পারবেন?", "Amake ektu shahajjo korte parben?", "Me a little help could you do?", "Could you do me a favour?"),
+         ("একটু আস্তে কথা বলতে পারবেন?", "Ektu aste kotha bolte parben?", "A little slowly could you talk?", "Could you speak a bit more slowly?"),
+         ("আপনার ফোন নম্বরটা দেবেন?", "Apnar phone number-ta deben?", "Your phone number will you give?", "Could I have your phone number?"),
+         ("এই প্যাকেটটা রেখে দেবেন?", "Ei packet-ta rekhe deben?", "This packet, having kept, will you give?", "Could you keep this parcel for me?"),
+         ("অনেক উপকার হল।", "Onek upokar holo.", "Much help happened.", "That's a big help, thank you."),
+     ],
+     "words": [("উপকার", "Upokar", "Help, a favour", "অনেক উপকার হল।"), ("নম্বর", "Number", "Number", "আপনার ফোন নম্বরটা দেবেন?")],
+     "exercises": ("Ei packet-ta rekhe deben?", "Onek upokar holo.", ("Amake ektu shahajjo korte parben?", "parben"))},
+    {"slug": "likes", "topic": "food", "title": "Likes and Preferences", "description": "Say what you like and what you prefer.",
+     "situation": "Lunch with colleagues: talking about food.",
+     "tip": "Bengali says “to me, it feels good”: “amar … bhalo lage” (I like …), “bhalo lage na” (I don't like). “Apnar ki bhalo lage?” asks what someone likes. In “cha na coffee?”, “na” means “or”.",
+     "phrases": [
+         ("আমার মাছের ঝোল খুব ভালো লাগে।", "Amar macher jhol khub bhalo lage.", "To me fish curry feels very good.", "I really like fish curry."),
+         ("আমার ঝাল ভালো লাগে না।", "Amar jhal bhalo lage na.", "To me spicy doesn't feel good.", "I don't like spicy food."),
+         ("আপনার কী ভালো লাগে?", "Apnar ki bhalo lage?", "To you what feels good?", "What do you like?"),
+         ("আমি মিষ্টি দই বেশি পছন্দ করি।", "Ami mishti doi beshi pochhondo kori.", "I sweet yoghurt more prefer.", "I prefer mishti doi."),
+         ("চা না কফি?", "Cha na coffee?", "Tea or coffee?", "Would you like tea or coffee?"),
+     ],
+     "words": [("মাছ", "Maachh", "Fish", "আমার মাছের ঝোল খুব ভালো লাগে।"), ("পছন্দ", "Pochhondo", "Liking, choice", "আমি মিষ্টি দই বেশি পছন্দ করি।")],
+     "exercises": ("Apnar ki bhalo lage?", "Amar jhal bhalo lage na.", ("Ami mishti doi beshi pochhondo kori.", "pochhondo"))},
+    {"slug": "comparing", "topic": "shopping", "title": "Comparing Things", "description": "Compare prices, sizes and options.",
+     "situation": "Choosing between two kurtas in New Market.",
+     "tip": "To compare, add “-er cheye” (than) to what you compare against: “bus-er cheye” (than the bus), “otar cheye” (than that one). Then say what is more: “shosta” (cheaper), “taratari” (faster), “boro” (bigger).",
+     "phrases": [
+         ("এটা ওটার চেয়ে সস্তা।", "Eta otar cheye shosta.", "This than that cheap.", "This one is cheaper than that one."),
+         ("এর চেয়ে বড় সাইজ আছে?", "Er cheye boro size achhe?", "Than this a big size is there?", "Do you have a bigger size than this?"),
+         ("মেট্রো বাসের চেয়ে তাড়াতাড়ি যায়।", "Metro bus-er cheye taratari jay.", "Metro than bus quickly goes.", "The metro is faster than the bus."),
+         ("কোনটা ভালো?", "Konta bhalo?", "Which one good?", "Which one is better?"),
+         ("দুটোই সুন্দর।", "Dutoi shundor.", "Both of them beautiful.", "They're both lovely."),
+     ],
+     "words": [("সস্তা", "Shosta", "Cheap", "এটা ওটার চেয়ে সস্তা।"), ("বড়", "Boro", "Big", "এর চেয়ে বড় সাইজ আছে?")],
+     "exercises": ("Konta bhalo?", "Eta otar cheye shosta.", ("Er cheye boro size achhe?", "boro"))},
+    {"slug": "travel", "topic": "transport", "title": "Travelling Out of Kolkata", "description": "Buy a train ticket and ask about departures.",
+     "situation": "Buying a train ticket to Shantiniketan at Howrah Station.",
+     "tip": "Trains to Shantiniketan (Bolpur station) leave from Howrah. Ask “kokhon chharbe?” (when will it leave?) and “pouchhate kotokkhon lagbe?” (how long to get there?).",
+     "phrases": [
+         ("বোলপুরের একটা টিকিট দিন।", "Bolpur-er ekta ticket din.", "Bolpur's one ticket please give.", "One ticket to Bolpur, please."),
+         ("ট্রেন কখন ছাড়বে?", "Train kokhon chharbe?", "Train when will leave?", "When does the train leave?"),
+         ("কোন প্ল্যাটফর্ম থেকে ছাড়বে?", "Kon platform theke chharbe?", "Which platform from will it leave?", "Which platform does it leave from?"),
+         ("পৌঁছাতে কতক্ষণ লাগবে?", "Pouchhate kotokkhon lagbe?", "To reach how long will it take?", "How long does it take to get there?"),
+         ("জানালার পাশে সিট পাওয়া যাবে?", "Janalar pashe seat pawa jabe?", "Beside the window a seat can be got?", "Can I get a window seat?"),
+     ],
+     "words": [("টিকিট", "Ticket", "Ticket", "বোলপুরের একটা টিকিট দিন।"), ("জানালা", "Janala", "Window", "জানালার পাশে সিট পাওয়া যাবে?")],
+     "exercises": ("Train kokhon chharbe?", "Bolpur-er ekta ticket din.", ("Kon platform theke chharbe?", "platform"))},
+    {"slug": "shop-problems", "topic": "shopping", "title": "When Something Goes Wrong in a Shop", "description": "Exchange an item, report a fault and ask for a refund.",
+     "situation": "The shirt you bought yesterday in Gariahat is too small.",
+     "tip": "Keep the bill: shops exchange more readily than they refund. “Bodle deben?” (will you exchange it?) is the key phrase.",
+     "phrases": [
+         ("এই জামাটা একটু ছোট।", "Ei jama-ta ektu chhoto.", "This shirt a little small.", "This shirt is a bit small."),
+         ("এটা বদলে দেবেন?", "Eta bodle deben?", "This, having changed, will you give?", "Could you exchange this?"),
+         ("বিলটা আমার কাছে আছে।", "Bill-ta amar kachhe achhe.", "The bill is near me.", "I have the bill."),
+         ("এটা কাজ করছে না।", "Eta kaaj korchhe na.", "This is not doing work.", "This isn't working."),
+         ("টাকাটা ফেরত দেবেন?", "Taka-ta pherot deben?", "The money back will you give?", "Could I have a refund?"),
+     ],
+     "words": [("ছোট", "Chhoto", "Small", "এই জামাটা একটু ছোট।"), ("ফেরত", "Pherot", "Back (returned)", "টাকাটা ফেরত দেবেন?")],
+     "exercises": ("Eta kaaj korchhe na.", "Eta bodle deben?", ("Bill-ta amar kachhe achhe.", "kachhe"))},
+    {"slug": "work-study", "topic": "college", "title": "Work and Study", "description": "Talk about deadlines, meetings and tasks.", "ages": ("teen", "adult"),
+     "situation": "A busy week at an office in Salt Lake Sector V.",
+     "tip": "Deadlines and meetings are often said in English inside Bengali: “deadline-ta kobe?” (when's the deadline?). The future -bo works here too: “shesh korbo” (I'll finish).",
+     "phrases": [
+         ("ডেডলাইনটা কবে?", "Deadline-ta kobe?", "The deadline which day?", "When's the deadline?"),
+         ("কালকের মধ্যে কাজটা শেষ করব।", "Kalker moddhe kaaj-ta shesh korbo.", "Within tomorrow the work I'll finish.", "I'll finish the work by tomorrow."),
+         ("মিটিংটা কটায়?", "Meeting-ta kotay?", "The meeting at what time?", "What time is the meeting?"),
+         ("আমি আপনাকে ইমেল পাঠাব।", "Ami apnake email pathabo.", "I to you email will send.", "I'll email you."),
+         ("আমার একটু সময় লাগবে।", "Amar ektu shomoy lagbe.", "To me a little time will be needed.", "I'll need a little time."),
+     ],
+     "words": [("সময়", "Shomoy", "Time", "আমার একটু সময় লাগবে।"), ("শেষ", "Shesh", "End, finished", "কালকের মধ্যে কাজটা শেষ করব।")],
+     "exercises": ("Deadline-ta kobe?", "Ami apnake email pathabo.", ("Amar ektu shomoy lagbe.", "shomoy"))},
+    {"slug": "home-problems", "topic": "emergency", "title": "Sorting Out Problems at Home", "description": "Report a problem at home and ask for it to be fixed.",
+     "situation": "The power has gone and the fan isn't working in your flat.",
+     "tip": "“Current chole gechhe” (the power's gone) is what everyone says in Kolkata. Ask “kokhon thik korben?” (when will you fix it?).",
+     "phrases": [
+         ("কারেন্ট চলে গেছে।", "Current chole gechhe.", "The current has gone away.", "The power's gone."),
+         ("পাখাটা চলছে না।", "Pakha-ta cholchhe na.", "The fan is not running.", "The fan isn't working."),
+         ("কলে জল আসছে না।", "Kol-e jol ashchhe na.", "In the tap water is not coming.", "There's no water in the tap."),
+         ("কখন ঠিক করবেন?", "Kokhon thik korben?", "When will you fix?", "When will you fix it?"),
+         ("একজন মিস্ত্রি পাঠাবেন?", "Ekjon mistri pathaben?", "One repairman will you send?", "Could you send a repairman?"),
+     ],
+     "words": [("পাখা", "Pakha", "Fan", "পাখাটা চলছে না।"), ("মিস্ত্রি", "Mistri", "Repairman", "একজন মিস্ত্রি পাঠাবেন?")],
+     "exercises": ("Kol-e jol ashchhe na.", "Kokhon thik korben?", ("Current chole gechhe.", "gechhe"))},
+    {"slug": "long-conversation", "topic": "smalltalk", "title": "A Longer Conversation", "description": "Keep a conversation going: agree, disagree and tell a short story.",
+     "situation": "A long adda at the Indian Coffee House on College Street.",
+     "tip": "Keep an adda going with “tarpor?” (and then?), “thik bolechho” (you're right) and “ami ektu onnorokom bhabi” (I see it a bit differently).",
+     "phrases": [
+         ("তারপর কী হল?", "Tarpor ki holo?", "Then what happened?", "And then what happened?"),
+         ("ঠিক বলেছ।", "Thik bolechho.", "Right you said.", "You're right."),
+         ("আমি একটু অন্যরকম ভাবি।", "Ami ektu onnorokom bhabi.", "I a little differently think.", "I see it a bit differently."),
+         ("সত্যি? জানতাম না।", "Shotti? Jantam na.", "Really? I didn't know.", "Really? I didn't know that."),
+         ("একটা মজার ঘটনা বলি।", "Ekta mojar ghotona boli.", "A funny incident let me tell.", "Let me tell you something funny."),
+     ],
+     "words": [("ঘটনা", "Ghotona", "Incident, story", "একটা মজার ঘটনা বলি।"), ("সত্যি", "Shotti", "Really, true", "সত্যি? জানতাম না।")],
+     "exercises": ("Ami ektu onnorokom bhabi.", "Tarpor ki holo?", ("Thik bolechho.", "bolechho"))},
+]
+
+A2_GRAMMAR = [
+    ("past-tense", "A2", "The past: “gelam”, “khelam”, “korlam”",
+     "What you did ends in -lam: “gelam” (I went), “khelam” (I ate), “korlam” (I did). With “apni” (you, polite) it ends in -len: “korlen?” (did you "
+     "do?), “gelen?” (did you go?). Bengali's past is not gendered.",
+     ["কাল আমি ভিক্টোরিয়া মেমোরিয়ালে গেলাম।", "বন্ধুদের সঙ্গে ফুচকা খেলাম।", "কাল আপনি কী করলেন?"], ["yesterday", "long-conversation"]),
+    ("future-tense", "A2", "The future: “-bo”",
+     "What you will do ends in -bo: “uthbo” (I'll get up), “jabo” (I'll go, we'll go), “shesh korbo” (I'll finish). “Kal” with a future verb means "
+     "tomorrow; with a past verb, yesterday.",
+     ["কাল সকালে তাড়াতাড়ি উঠব।", "আমরা দক্ষিণেশ্বর যাব।", "কালকের মধ্যে কাজটা শেষ করব।"], ["plans", "work-study"]),
+    ("polite-questions", "A2", "Softer requests: “… -te parben?”",
+     "To ask kindly, ask whether the person could do it: “korte parben?” (could you do?), “bolte parben?” (could you say?), or use the polite "
+     "future: “pathaben?” (will you send?), “deben?” (will you give?). It is softer than the plain request (“din”, “korun”).",
+     ["আমাকে একটু সাহায্য করতে পারবেন?", "একটু আস্তে কথা বলতে পারবেন?", "একজন মিস্ত্রি পাঠাবেন?"], ["favours", "home-problems"]),
+    ("liking", "A2", "Liking things: “amar … bhalo lage”",
+     "Bengali says “to me, X feels good”: “amar cha bhalo lage” (I like tea), “bhalo lage na” (don't like). “Pochhondo kori” is “I prefer, I "
+     "like”. It is the same whoever is speaking.",
+     ["আমার মাছের ঝোল খুব ভালো লাগে।", "আমার ঝাল ভালো লাগে না।", "আপনার কী ভালো লাগে?"], ["likes", "comparing"]),
+    ("comparing", "A2", "Comparing: “-er cheye”",
+     "Add “-er cheye” (than) to what you compare against: “bus-er cheye” (than the bus). After “eta” (this) and “ota” (that) it becomes “etar "
+     "cheye” and “otar cheye”, and “er cheye” is “than this”. Then say what is more: “shosta” (cheaper), “taratari” (faster).",
+     ["এটা ওটার চেয়ে সস্তা।", "এর চেয়ে বড় সাইজ আছে?", "মেট্রো বাসের চেয়ে তাড়াতাড়ি যায়।"], ["comparing"]),
+]
+
+A2_SITUATIONS = [
+    {"slug": "flat-problem", "level": "A2", "topic": "emergency", "difficulty": 3, "title": "A power cut at home",
+     "description": "The power has gone and the fan isn't working in your rented flat in Salt Lake.", "goal": "Tell your landlady what is wrong and find out when it will be fixed.",
+     "setting": "Your rented flat in Salt Lake", "partner": ("Mitra mashima", "Landlady"),
+     "learn": ["Current chole gechhe.", "Pakha-ta cholchhe na.", "Kokhon thik korben?"],
+     "choose": ("Ki holo? Hothat ele?", "What happened? You've come all of a sudden?", ["Current chole gechhe.", "Ekta egg roll din.", "Janalar pashe seat pawa jabe?"]),
+     "reply": ("Ish! Aaj shondher moddhe thik koriye debo.", "Oh dear! I'll get it fixed by this evening.", ["Onek upokar holo.", "Thik achhe, dhonnobad.", "Kokhon thik korben?"])},
+    {"slug": "train-to-bolpur", "level": "A2", "topic": "transport", "difficulty": 3, "title": "Train to Shantiniketan",
+     "description": "Buying a train ticket to Bolpur, for Shantiniketan, at Howrah Station.", "goal": "Buy a ticket and find out when the train leaves and from which platform.",
+     "setting": "The ticket counter at Howrah Station", "partner": ("Haldar babu", "Ticket clerk"),
+     "learn": ["Bolpur-er ekta ticket din.", "Train kokhon chharbe?", "Janalar pashe seat pawa jabe?"],
+     "choose": ("Kothay jaben?", "Where to?", ["Bolpur-er ekta ticket din.", "Current chole gechhe.", "Apnar ki bhalo lage?"]),
+     "reply": ("Bolpur, ekta ticket. Train dosh-tay chharbe.", "Bolpur, one ticket. The train leaves at ten.",
+               ["Pouchhate kotokkhon lagbe?", "Kon platform theke chharbe?", "Thik achhe, dhonnobad."]),
+     "translate": ("How would you say “Which platform does it leave from?” in Bengali?", "Kon platform theke chharbe?")},
+    {"slug": "exchange-shirt", "level": "A2", "topic": "shopping", "difficulty": 3, "title": "Exchange a shirt",
+     "description": "The shirt you bought yesterday in Gariahat is too small.", "goal": "Explain the problem and exchange it or get your money back.",
+     "setting": "A shop in Gariahat", "partner": ("Rina di", "Shopkeeper"),
+     "learn": ["Ei jama-ta ektu chhoto.", "Eta bodle deben?", "Bill-ta amar kachhe achhe."],
+     "choose": ("Ashun! Kal eshechhilen na? Ki shomoshya?", "Come in! You came yesterday, didn't you? What's the problem?",
+                ["Ei jama-ta ektu chhoto.", "Train kokhon chharbe?", "Kal kotha hobe."]),
+     "reply": ("Bill achhe? Boro size diye dichhi.", "Do you have the bill? I'll give you a bigger size.", ["Bill-ta amar kachhe achhe.", "Hyan, bill achhe.", "Taka-ta pherot deben?"])},
+    {"slug": "plan-a-trip", "level": "A2", "topic": "smalltalk", "difficulty": 4, "title": "Plan a trip to Shantiniketan",
+     "description": "Friday night: planning Sunday with Arko.", "goal": "Agree on a plan for Sunday: when to leave and how to go.",
+     "setting": "Your flat", "partner": ("Arko", "Friend"),
+     "learn": ["Robibar ki plan?", "Kal shokale taratari uthbo.", "Kal kotha hobe."],
+     "choose": ("Robibar Shantiniketan jabe?", "Fancy going to Shantiniketan on Sunday?", ["Darun! Robibar ki plan?", "Ei jama-ta ektu chhoto.", "Current chole gechhe."]),
+     "reply": ("Shokal chhoy-tay beroi. Train-e jabo?", "Let's leave at six in the morning. Shall we take the train?",
+               ["Thik achhe, train-e jabo.", "Kal shokale taratari uthbo.", "Bus-e gele bhalo."])},
+]
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+# B1 (migration 0049)
+# ------------------------------------------------------------------------------------------------------------------------------------
+B1_LESSONS = [
+    {"slug": "obligations", "topic": "college", "title": "Things I Have To Do", "description": "Say what you have to, need to and want to do.",
+     "situation": "Asking your manager for two days' leave.",
+     "tip": "“-te hobe” is “have to”: “jete hobe” (I have to go), “bolte hobe” (I need to speak). “Amar … dorkar” means “I need …”: “amar chhuti dorkar” (I need leave).",
+     "phrases": [
+         ("কাল আমাকে তাড়াতাড়ি যেতে হবে।", "Kal amake taratari jete hobe.", "Tomorrow to me early to go will be.", "I have to leave early tomorrow."),
+         ("আমার দুদিন ছুটি দরকার।", "Amar dudin chhuti dorkar.", "To me two days' leave is needed.", "I need two days' leave."),
+         ("ম্যানেজারের সঙ্গে কথা বলতে হবে।", "Manager-er shonge kotha bolte hobe.", "With the manager talking will have to be.", "I need to speak to the manager."),
+         ("এটা আজকেই করতে হবে?", "Eta aajkei korte hobe?", "This today itself will have to be done?", "Does this have to be done today?"),
+         ("আমি চেষ্টা করব।", "Ami cheshta korbo.", "I will do trying.", "I'll try."),
+     ],
+     "words": [("ছুটি", "Chhuti", "Leave, holiday", "আমার দুদিন ছুটি দরকার।"), ("দরকার", "Dorkar", "Need", "আমার দুদিন ছুটি দরকার।")],
+     "exercises": ("Eta aajkei korte hobe?", "Amar dudin chhuti dorkar.", ("Kal amake taratari jete hobe.", "jete"))},
+    {"slug": "if-when", "topic": "smalltalk", "title": "If and When", "description": "Talk about conditions and about when things happened.",
+     "situation": "Talking about the monsoon with a neighbour.",
+     "tip": "“-le” makes “if”: “brishti hole” (if it rains), “jiggesh korle” (if you ask). “Jokhon” is “when”: “jokhon Kolkatay elam” (when I came to Kolkata).",
+     "phrases": [
+         ("বৃষ্টি হলে আমি আসব না।", "Brishti hole ami ashbo na.", "Rain if it happens, I won't come.", "If it rains, I won't come."),
+         ("যখন কলকাতায় এলাম, খুব গরম ছিল।", "Jokhon Kolkatay elam, khub gorom chhilo.", "When I came to Kolkata, very hot it was.", "When I came to Kolkata, it was very hot."),
+         ("জিজ্ঞেস করলে বলব।", "Jiggesh korle bolbo.", "If asked, I'll tell.", "If you ask, I'll tell you."),
+         ("সময় পেলে দেখা করব।", "Shomoy pele dekha korbo.", "If time is got, I'll meet.", "If I get time, I'll come and see you."),
+         ("রাস্তায় জল জমলে অফিস যাওয়া মুশকিল।", "Rastay jol jomle office jawa mushkil.", "If water collects on the road, going to office is hard.", "When the roads flood, getting to work is hard."),
+     ],
+     "words": [("বৃষ্টি", "Brishti", "Rain", "বৃষ্টি হলে আমি আসব না।"), ("রাস্তা", "Rasta", "Road", "রাস্তায় জল জমলে অফিস যাওয়া মুশকিল।")],
+     "exercises": ("Jiggesh korle bolbo.", "Brishti hole ami ashbo na.", ("Shomoy pele dekha korbo.", "pele"))},
+    {"slug": "can-cant", "topic": "greetings", "title": "What I Can and Can't Do", "description": "Talk about skills, and about what you will or won't be able to do.",
+     "situation": "Getting to know a new colleague.",
+     "tip": "“Para” is “can”: “ami gari chalate pari” (I can drive), “pari na” (I can't). For a particular time: “ashte parbo na” (I won't be able to come).",
+     "phrases": [
+         ("আমি গাড়ি চালাতে পারি।", "Ami gari chalate pari.", "I can drive a car.", "I can drive."),
+         ("কাল আসতে পারব না।", "Kal ashte parbo na.", "Tomorrow I won't be able to come.", "I can't make it tomorrow."),
+         ("আমি সাঁতার কাটতে পারি না।", "Ami shatar katte pari na.", "I cannot do swimming.", "I can't swim."),
+         ("আপনি বাংলা পড়তে পারেন?", "Apni Bangla porte paren?", "Can you read Bengali?", "Can you read Bengali?"),
+         ("একটু একটু বাংলা বলতে পারি।", "Ektu ektu Bangla bolte pari.", "A little a little Bengali I can speak.", "I can speak a little Bengali."),
+     ],
+     "words": [("সাঁতার", "Shatar", "Swimming", "আমি সাঁতার কাটতে পারি না।"), ("গাড়ি", "Gari", "Car", "আমি গাড়ি চালাতে পারি।")],
+     "exercises": ("Kal ashte parbo na.", "Ektu ektu Bangla bolte pari.", ("Ami gari chalate pari.", "chalate"))},
+    {"slug": "opinions", "topic": "smalltalk", "title": "Giving Your Opinion", "description": "Say what you think, agree and disagree politely.",
+     "situation": "Friends arguing about the best biryani in Kolkata.",
+     "tip": "“Amar mone hoy” (it seems to me) starts an opinion; “ami ekmot” (I agree) and “ami ekmot noi” (I don't agree) answer one. Kolkata biryani comes with a potato, and people argue about it!",
+     "phrases": [
+         ("আমার মনে হয় এটা ভালো আইডিয়া।", "Amar mone hoy eta bhalo idea.", "To me it seems this is a good idea.", "I think it's a good idea."),
+         ("আমি একমত।", "Ami ekmot.", "I am of one opinion.", "I agree."),
+         ("আমি একমত নই।", "Ami ekmot noi.", "I am not of one opinion.", "I don't agree."),
+         ("আপনার কী মনে হয়?", "Apnar ki mone hoy?", "To you what seems?", "What do you think?"),
+         ("কলকাতার বিরিয়ানিতে আলু না থাকলে চলে না!", "Kolkatar biryani-te alu na thakle chole na!", "In Kolkata's biryani, if there's no potato, it won't do!", "Kolkata biryani isn't biryani without the potato!"),
+     ],
+     "words": [("মনে", "Mone", "In the mind", "আমার মনে হয় এটা ভালো আইডিয়া।"), ("আলু", "Alu", "Potato", "কলকাতার বিরিয়ানিতে আলু না থাকলে চলে না!")],
+     "exercises": ("Apnar ki mone hoy?", "Ami ekmot noi.", ("Ami ekmot.", "ekmot"))},
+    {"slug": "complaints", "topic": "emergency", "title": "Making a Complaint", "description": "Complain politely, explain how long a problem has lasted and ask for action.",
+     "situation": "There has been no water in your flat for two days.",
+     "tip": "Say how long with “… dhore” (for …): “dudin dhore” (for two days). “Doya kore” (please, kindly) makes a complaint polite but firm.",
+     "phrases": [
+         ("দুদিন ধরে জল আসছে না।", "Dudin dhore jol ashchhe na.", "For two days water is not coming.", "There's been no water for two days."),
+         ("আমি তিনবার অভিযোগ করেছি।", "Ami tinbar obhijog korechhi.", "I have made a complaint three times.", "I've complained three times."),
+         ("দয়া করে আজকেই ঠিক করুন।", "Doya kore aajkei thik korun.", "Kindly fix it today itself.", "Please fix it today."),
+         ("এতে খুব অসুবিধা হচ্ছে।", "Ete khub oshubidha hochchhe.", "From this much trouble is happening.", "It's causing a lot of trouble."),
+         ("আমি ম্যানেজারের সঙ্গে কথা বলতে চাই।", "Ami manager-er shonge kotha bolte chai.", "I want to talk with the manager.", "I'd like to speak to the manager."),
+     ],
+     "words": [("অভিযোগ", "Obhijog", "Complaint", "আমি তিনবার অভিযোগ করেছি।"), ("অসুবিধা", "Oshubidha", "Trouble, inconvenience", "এতে খুব অসুবিধা হচ্ছে।")],
+     "exercises": ("Ete khub oshubidha hochchhe.", "Doya kore aajkei thik korun.", ("Dudin dhore jol ashchhe na.", "dhore"))},
+    {"slug": "what-happened", "topic": "smalltalk", "title": "Telling What Happened", "description": "Tell a story: who, when, and what someone said.",
+     "situation": "Telling a friend about a bad day.",
+     "tip": "“-te bollo” reports what someone told you to do: “kal ashte bollo” (they told me to come tomorrow). “Keu” is “someone”, and a verb said twice in -te is “by the time”: “pouchhate pouchhate” (by the time I got there).",
+     "phrases": [
+         ("ওরা কাল আসতে বলল।", "Ora kal ashte bollo.", "They said to come tomorrow.", "They told me to come tomorrow."),
+         ("স্টেশনে পৌঁছাতে পৌঁছাতে ট্রেন ছেড়ে দিল।", "Station-e pouchhate pouchhate train chhere dilo.", "By the time of reaching the station, the train left.", "By the time I got to the station, the train had left."),
+         ("কেউ আমার মানিব্যাগ চুরি করেছে।", "Keu amar manibag churi korechhe.", "Someone has stolen my wallet.", "Someone has stolen my wallet."),
+         ("তখন আমি পুলিশকে ফোন করলাম।", "Tokhon ami police-ke phone korlam.", "Then I phoned the police.", "So I called the police."),
+         ("শেষে সব ঠিক হয়ে গেল।", "Sheshe sob thik hoye gelo.", "In the end everything became fine.", "In the end it all worked out."),
+     ],
+     "words": [("চুরি", "Churi", "Theft", "কেউ আমার মানিব্যাগ চুরি করেছে।"), ("শেষে", "Sheshe", "In the end", "শেষে সব ঠিক হয়ে গেল।")],
+     "exercises": ("Keu amar manibag churi korechhe.", "Sheshe sob thik hoye gelo.", ("Ora kal ashte bollo.", "bollo"))},
+]
+
+B1_GRAMMAR = [
+    ("having-to", "B1", "Having to: “-te hobe”",
+     "Add “-te hobe” to a verb for what you have to do: “jete hobe” (have to go), “bolte hobe” (need to speak). “Amar … dorkar” on its own means "
+     "“I need …”: “amar chhuti dorkar” (I need leave). “-te chai” is “want to”: “bolte chai” (I want to speak).",
+     ["কাল আমাকে তাড়াতাড়ি যেতে হবে।", "আমার দুদিন ছুটি দরকার।", "ম্যানেজারের সঙ্গে কথা বলতে হবে।"], ["obligations", "complaints"]),
+    ("if-and-when", "B1", "If and when: “-le” and “jokhon”",
+     "“-le” makes “if”: “brishti hole” (if it rains), “jiggesh korle” (if you ask), “pele” (if I get). “Jokhon” makes “when”: “jokhon elam” (when I "
+     "came). The rest of the sentence says what happens then.",
+     ["বৃষ্টি হলে আমি আসব না।", "যখন কলকাতায় এলাম, খুব গরম ছিল।", "জিজ্ঞেস করলে বলব।"], ["if-when"]),
+    ("can-and-cant", "B1", "Can and can't: “-te pari” and “-te parbo na”",
+     "“-te pari” is “I can”: “chalate pari” (I can drive); “pari na” is “I can't”. For one particular time use the future: “ashte parbo na” (I won't "
+     "be able to come). With “apni”: “porte paren?” (can you read?).",
+     ["আমি গাড়ি চালাতে পারি।", "কাল আসতে পারব না।", "আমি সাঁতার কাটতে পারি না।"], ["can-cant"]),
+    ("what-someone-said", "B1", "Telling what happened: “-te bollo”, “keu” and “-te -te”",
+     "“-te bollo” reports what someone told you to do: “ashte bollo” (they told me to come). “Keu” is “someone”. A verb in -te said twice is “by "
+     "the time”: “pouchhate pouchhate” (by the time I reached).",
+     ["ওরা কাল আসতে বলল।", "স্টেশনে পৌঁছাতে পৌঁছাতে ট্রেন ছেড়ে দিল।", "কেউ আমার মানিব্যাগ চুরি করেছে।"], ["what-happened", "opinions"]),
+]
+
+B1_SITUATIONS = [
+    {"slug": "water-complaint", "level": "B1", "topic": "emergency", "difficulty": 4, "title": "Complain about the water",
+     "description": "There has been no water in your flat for two days, and you go to the housing society office.",
+     "goal": "Explain how long the problem has lasted and get it fixed today.", "setting": "The housing society office", "partner": ("Mr Banerjee", "Society secretary"),
+     "learn": ["Dudin dhore jol ashchhe na.", "Ami tinbar obhijog korechhi.", "Doya kore aajkei thik korun."],
+     "choose": ("Bolun, ki shomoshya?", "Tell me, what's the problem?", ["Dudin dhore jol ashchhe na.", "Ami shatar katte pari na.", "Amar mone hoy eta bhalo idea."]),
+     "reply": ("Pump kharap hoye gechhe. Kal thik korbo.", "The pump has broken down. We'll fix it tomorrow.",
+               ["Doya kore aajkei thik korun.", "Ete khub oshubidha hochchhe.", "Ami manager-er shonge kotha bolte chai."])},
+    {"slug": "late-for-meeting", "level": "B1", "topic": "college", "difficulty": 5, "title": "Late for a meeting", "ages": ("teen", "adult"),
+     "description": "You're stuck in traffic on the way to a ten o'clock meeting in Salt Lake Sector V.", "goal": "Tell your manager you'll be late, why, and when you'll arrive.",
+     "setting": "A phone call from a taxi on the EM Bypass", "partner": ("Sudipa", "Manager"),
+     "learn": ["Amar ektu shomoy lagbe.", "Ami apnake email pathabo.", "Kal amake taratari jete hobe."],
+     "choose": ("Hello! Kothay apni? Meeting shuru hochchhe.", "Hello! Where are you? The meeting is starting.",
+                ["Khub jaam. Ektu deri hobe.", "Ekta egg roll din.", "Janalar pashe seat pawa jabe?"]),
+     "reply": ("Accha. Kokhon pouchhaben?", "All right. When will you get here?", ["Dosh minute-er moddhe pouchhabo.", "Aro adh ghonta lagbe.", "Ami apnake email pathabo."])},
+]

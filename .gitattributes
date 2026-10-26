@@ -1,0 +1,2 @@
+# Vendored upstream code is kept byte-identical (see backend/vendor/README.md): exempt it from whitespace checks.
+backend/vendor/qrcodegen.py -whitespace

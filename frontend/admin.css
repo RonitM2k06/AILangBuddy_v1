@@ -1,0 +1,45 @@
+/* Admin console: tables, filters, forms, status badges and the inline SVG charts. Uses the app's existing tokens (.card, .chip, .btn, .pc-in). */
+.admin { max-width: 1180px; }
+.admin h3 { margin: 18px 0 10px; }
+.ad-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+.ad-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.ad-table th { text-align: left; padding: 10px 14px; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--line); background: var(--surface-2); white-space: nowrap; }
+.ad-table td { padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.ad-table tr:last-child td { border-bottom: 0; }
+.ad-kv { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 14px; }
+.ad-kv td, .ad-kv th { padding: 6px 0; border-bottom: 1px dashed var(--line); text-align: left; }
+.ad-kv td:last-child { text-align: right; }
+.ad-big { font-size: 28px; font-weight: 800; margin-top: 4px; overflow-wrap: anywhere; }   /* long values (a migration name) wrap on narrow phones */
+.ad-stat .ad-big .ad-sup { font-size: 13px; font-weight: 600; }
+.ad-sup { color: var(--ink-3); font-style: italic; }
+.ad-form { display: grid; gap: 10px; margin-top: 10px; }
+.ad-field { display: grid; gap: 4px; font-size: 13px; font-weight: 600; }
+.ad-field input, .ad-field textarea, .ad-field select { font-weight: 400; width: 100%; }
+.ad-filters .pc-in, .admin .pc-in { min-width: 0; }
+.ad-list { margin: 8px 0 0; padding-left: 18px; }
+.ad-list li { margin: 4px 0; }
+.ad-findings { margin-bottom: 12px; border-left: 4px solid #d8284b; }
+.ad-findings.ad-ok { border-left-color: #14b87a; }
+.ad-note { margin-bottom: 12px; border-left: 4px solid #a86b00; }
+.ad-conflict { margin-bottom: 12px; border-left: 4px solid #d8284b; background: #fff4f6; }
+.ad-error { max-width: 560px; }
+.ad-suppressed { max-width: 560px; }
+.ad-empty { text-align: center; padding: 28px; }
+.ad-pager .btn[disabled] { opacity: .4; }
+.ad-chart { max-width: 100%; height: auto; margin-top: 8px; }
+.ad-chart .ad-line { stroke: #5b4bff; stroke-width: 2; }
+.ad-chart circle { fill: #5b4bff; }
+.ad-chart circle.ad-gap { fill: #c7c7d6; }
+.ad-chart .ad-axis { stroke: #d7d7e4; }
+.ad-chart .ad-bar { fill: #8b5cf6; }
+.ad-chart .ad-tick { font-size: 11px; fill: #6b6b80; }
+details summary { cursor: pointer; }
+@media (max-width: 860px) { .ad-table th, .ad-table td { padding: 8px 10px; } }
+
+/* admin mode: the learner chrome (confidence card, emergency help button) has no place in the console */
+.mode-admin #side-card, .mode-admin .sos-fab, .mode-admin .sos-panel { display: none; }
+
+/* Phase 15A: the filter selects match the other fields and are a comfortable size on touch screens */
+.admin select:not(.pc-in) { padding: 9px 12px; border-radius: 11px; border: 1px solid var(--line); background: var(--surface-2); font: inherit; font-size: 14px; color: inherit; max-width: 100%; }
+@media (max-width: 860px) { .admin select:not(.pc-in) { font-size: 16px; } }
+@media (pointer: coarse) { .admin select:not(.pc-in) { min-height: 44px; } }

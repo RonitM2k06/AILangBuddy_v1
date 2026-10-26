@@ -1,7 +1,13 @@
 .env
 .venv/
-buddy.db
+buddy.db*
+*.bak
 __pycache__/
 *.pyc
 .DS_Store
 
+.pytest_cache/
+
+# voice recordings must never be committed (they are stored outside the repo by default)
+recordings/
+*.webm

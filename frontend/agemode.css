@@ -1,0 +1,22 @@
+/* Child and teen presentation. Only active under body.mode-child / body.mode-teen; adults see none of it. */
+.mode-child { font-size: 18px; }
+.mode-child .sidebar .side-card, .mode-child .sos-fab { display: none; }
+.mode-child nav a { font-size: 1.1em; padding: 14px 16px; }
+.kids .kid-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.kids .kid-head h1 { margin: 0; font-size: 1.8em; }
+.kids .hearts { font-size: 1.8em; letter-spacing: 2px; }
+.kids .kid-card { text-align: center; padding: 22px; margin-bottom: 14px; }
+.kids .kid-ic { font-size: 3em; }
+.kids .kid-q { font-size: 1.3em; font-weight: 700; margin: 0 0 12px; }
+.kids .kid-btn { font-size: 1.3em; padding: 16px 28px; min-height: 60px; margin: 6px; }
+.kids .kid-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+.kids .kid-tile { display: block; text-align: center; padding: 18px 10px; border-radius: 22px; border: 3px solid var(--line, #ddd); background: var(--card, #fff); text-decoration: none; color: inherit; font-weight: 700; min-height: 150px; }
+.kids .kid-tile.open { border-color: #ffb703; } .kids .kid-tile.completed { border-color: #2fbf71; } .kids .kid-tile.locked { opacity: .5; }
+.kids .kid-s { margin-top: 6px; font-size: .9em; }
+.kids .kid-choices { display: grid; gap: 12px; margin: 14px 0; }
+.kids .kid-choice { font-size: 1.4em; min-height: 72px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.kids .kid-choice small { font-size: .6em; opacity: .8; }
+.kids .kid-choice.right { background: #2fbf71; color: #fff; }
+.kids .kid-progress { text-align: center; font-weight: 700; margin-bottom: 8px; }
+.kids .kid-ok { border: 3px solid #2fbf71; } .kids .kid-no { border: 3px solid #ff7b7b; }
+.mode-teen .page-head h1 { letter-spacing: -.02em; }
